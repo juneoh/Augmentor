@@ -15,14 +15,10 @@ install:
       wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda info -a
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy=1.13 pytest
+  - export OPATH="$PATH" && export PATH="$HOME/miniconda/bin:$PATH"
+  - conda create -y -n test-environment python=$TRAVIS_PYTHON_VERSION pytest
   - source activate test-environment
-  - conda install torchvision -c soumith || return 0
+  - conda install -y torchvision -c soumith || source deactivate && export PATH="$OPATH"
   - pip install -r requirements.txt
 # command to run tests
 script: py.test -v
