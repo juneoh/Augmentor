@@ -16,9 +16,13 @@ install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export OPATH="$PATH" && export PATH="$HOME/miniconda/bin:$PATH"
-  - conda create -y -n test-environment python=$TRAVIS_PYTHON_VERSION pytest
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytest
   - source activate test-environment
-  - conda install -y torchvision -c soumith || source deactivate && export PATH="$OPATH"
+  - conda install torchvision -c soumith || source deactivate && export PATH="$OPATH"
   - pip install -r requirements.txt
 # command to run tests
 script: py.test -v
