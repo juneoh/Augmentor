@@ -9,7 +9,6 @@ python:
   - "3.6"
 # command to install dependencies
 install:
-  - sudo apt-get update
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
@@ -23,7 +22,7 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytest
   - source activate test-environment
-  - conda install torchvision -c soumith || return 0
+  - conda install torchvision -c soumith || source deactivate
   - pip install -r requirements.txt
 # command to run tests
 script: py.test -v
